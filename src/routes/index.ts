@@ -1,11 +1,9 @@
-import { Router } from 'express';
+import { Router } from "express";
+
+import usersRouter from "./users.routes";
 
 const appRouter = Router();
 
-appRouter.get('/', (request, response) => {
-  const { name } = request.body;
-
-  return response.json({ name: name })
-})
+appRouter.use("/users", usersRouter);
 
 export default appRouter;
