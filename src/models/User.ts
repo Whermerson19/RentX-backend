@@ -4,7 +4,7 @@ import {
   Entity, PrimaryGeneratedColumn, UpdateDateColumn,
 } from 'typeorm'
 
-import { Exclude } from 'class-transformer'
+import { Exclude, Expose } from 'class-transformer'
 
 @Entity('users')
 export default class User {
@@ -33,5 +33,10 @@ export default class User {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @Expose({name: 'url_image'})
+  getUrlImage(): string | null {
+    return this.image ? `http://localhost:3333/files/${this.image}` : null
+  }
 
 }

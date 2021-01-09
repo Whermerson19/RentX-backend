@@ -24,5 +24,10 @@ usersRouter.patch(
   upload.single("image"),
   changeProfileImageController.put
 );
+usersRouter.put(
+  "/change-profile",
+  authorization.clientAuthorization,
+  usersController.put
+);
 
 export default usersRouter;
