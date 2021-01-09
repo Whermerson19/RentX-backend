@@ -1,11 +1,28 @@
-import { Router } from 'express';
+import { Router } from "express";
 
-import UsersController from '../controllers/Users/UsersController'
+import multer from "multer";
+
+import Authorization from "../middlewares/Authorization";
+
+import UsersController from "../controllers/Users/UsersController";
+import ChangeProfileImageController from "../controllers/Users/ChangeProfileImageController";
+
+import uploadConfig from "../config/upload";
 
 const usersRouter = Router();
 
-const usersController = new UsersController()
+const authorization = new Authorization();
+const upload = multer(uploadConfig);
 
-usersRouter.post('/create', usersController.create);
+const usersController = new UsersController();
+const changeProfileImageController = new ChangeProfileImageController();
+
+usersRouter.post("/create", usersController.create);
+usersRouter.patch(
+  "/change-profile-image",
+  authorization.clientAuthorization,
+  upload.single("image"),
+  changeProfileImageController.put
+);
 
 export default usersRouter;
