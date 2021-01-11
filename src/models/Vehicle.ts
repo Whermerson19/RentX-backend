@@ -23,14 +23,17 @@ export default class Vehicle {
   @Column('decimal')
   acceleration: number;
 
-  @Column('decimal')
+  @Column('int')
   maximun_speed: number;
 
-  @Column('integer')
+  @Column('int')
   seats: number;
 
-  @Column('integer')
+  @Column('int')
   potency: number;
+
+  @Column()
+  car_image: string;
 
   @CreateDateColumn()
   created_at: Date;

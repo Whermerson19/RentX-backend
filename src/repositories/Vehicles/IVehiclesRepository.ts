@@ -10,6 +10,7 @@ export interface ICreateVehicle {
   maximun_speed: number;
   seats: number;
   potency: number;
+  car_image: string;
 }
 
 
@@ -21,4 +22,5 @@ export default interface IVehiclesRepository {
   findByDailyValue(daily_value: number): Promise<Vehicle | undefined>;
   findByTransmissionType(transmission_type: string): Promise<Vehicle | undefined>;
   findByName(name: string): Promise<Vehicle | undefined>;
+  listAllVehicles(): Promise<Vehicle[]>;
 }

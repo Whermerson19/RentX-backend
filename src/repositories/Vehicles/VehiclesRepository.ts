@@ -19,6 +19,7 @@ export default class VehiclesRepository implements IVehiclesRepository {
     daily_value,
     maximun_speed,
     potency,
+    car_image
   }: ICreateVehicle): Promise<Vehicle> {
     const vehicle = this.ormRepository.create({
       name,
@@ -30,6 +31,7 @@ export default class VehiclesRepository implements IVehiclesRepository {
       daily_value,
       maximun_speed,
       potency,
+      car_image
     });
 
     await this.ormRepository.save(vehicle);
@@ -92,5 +94,11 @@ export default class VehiclesRepository implements IVehiclesRepository {
     });
 
     return vehicle;
+  }
+
+  public async listAllVehicles(): Promise<Vehicle[]> {
+    const vehicles = await this.ormRepository.find();
+
+    return vehicles
   }
 }

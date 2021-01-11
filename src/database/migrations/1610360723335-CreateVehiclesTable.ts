@@ -40,19 +40,19 @@ export default class CreateVehiclesTable1610360723335
             name: 'acceleration',
             type: 'decimal',
             scale: 2,
-            precision: 2
+            precision: 10
           },
           {
             name: 'maximun_speed',
-            type: 'integer'
+            type: 'int'
           },
           {
             name: 'seats',
-            type: 'integer'
+            type: 'int'
           },
           {
             name: 'potency',
-            type: 'integer'
+            type: 'int'
           },
           {
             name: "created_at",
