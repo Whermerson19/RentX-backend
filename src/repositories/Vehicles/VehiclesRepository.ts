@@ -1,0 +1,96 @@
+import { getRepository, Repository } from "typeorm";
+import Vehicle from "../../models/Vehicle";
+import IVehiclesRepository, { ICreateVehicle } from "./IVehiclesRepository";
+
+export default class VehiclesRepository implements IVehiclesRepository {
+  private ormRepository: Repository<Vehicle>;
+
+  constructor() {
+    this.ormRepository = getRepository(Vehicle);
+  }
+
+  public async create({
+    name,
+    brand,
+    transmission_type,
+    acceleration,
+    seats,
+    fuel_type,
+    daily_value,
+    maximun_speed,
+    potency,
+  }: ICreateVehicle): Promise<Vehicle> {
+    const vehicle = this.ormRepository.create({
+      name,
+      brand,
+      transmission_type,
+      acceleration,
+      seats,
+      fuel_type,
+      daily_value,
+      maximun_speed,
+      potency,
+    });
+
+    await this.ormRepository.save(vehicle);
+
+    return vehicle;
+  }
+
+  public async save(vehicle: Vehicle): Promise<Vehicle> {
+    return this.ormRepository.save(vehicle);
+  }
+
+  public async findById(id: string): Promise<Vehicle | undefined> {
+    const vehicle = await this.ormRepository.findOne({
+      where: {
+        id,
+      },
+    });
+
+    return vehicle;
+  }
+
+  public async findByFuelType(fuel_type: string): Promise<Vehicle | undefined> {
+    const vehicle = await this.ormRepository.findOne({
+      where: {
+        fuel_type,
+      },
+    });
+
+    return vehicle;
+  }
+
+  public async findByDailyValue(
+    daily_value: number
+  ): Promise<Vehicle | undefined> {
+    const vehicle = await this.ormRepository.findOne({
+      where: {
+        daily_value,
+      },
+    });
+
+    return vehicle;
+  }
+  public async findByTransmissionType(
+    transmission_type: string
+  ): Promise<Vehicle | undefined> {
+    const vehicle = await this.ormRepository.findOne({
+      where: {
+        transmission_type,
+      },
+    });
+
+    return vehicle;
+  }
+
+  public async findByName(name: string): Promise<Vehicle | undefined> {
+    const vehicle = await this.ormRepository.findOne({
+      where: {
+        name,
+      },
+    });
+
+    return vehicle;
+  }
+}
