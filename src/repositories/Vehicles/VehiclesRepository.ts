@@ -1,4 +1,4 @@
-import { getRepository, Repository } from "typeorm";
+import { getRepository, LessThanOrEqual, Not, Repository } from "typeorm";
 import Vehicle from "../../models/Vehicle";
 import IVehiclesRepository, { ICreateVehicle } from "./IVehiclesRepository";
 
@@ -19,7 +19,7 @@ export default class VehiclesRepository implements IVehiclesRepository {
     daily_value,
     maximun_speed,
     potency,
-    car_image
+    car_image,
   }: ICreateVehicle): Promise<Vehicle> {
     const vehicle = this.ormRepository.create({
       name,
@@ -31,7 +31,7 @@ export default class VehiclesRepository implements IVehiclesRepository {
       daily_value,
       maximun_speed,
       potency,
-      car_image
+      car_image,
     });
 
     await this.ormRepository.save(vehicle);
@@ -99,6 +99,44 @@ export default class VehiclesRepository implements IVehiclesRepository {
   public async listAllVehicles(): Promise<Vehicle[]> {
     const vehicles = await this.ormRepository.find();
 
-    return vehicles
+    return vehicles;
+  }
+
+  public async listFilteredVehicles(
+    filter: string,
+    page: number
+  ): Promise<Vehicle[]> {
+    const skip = 2 * page - 2;
+
+    if (filter !== "") {
+      const vehicles = await this.ormRepository.find({
+        where: [
+          { fuel_type: filter },
+          { brand: filter },
+          { transmission_type: filter },
+          { daily_value: LessThanOrEqual(Number(filter)) },
+        ],
+        skip,
+        take: 2,
+      });
+
+      return vehicles;
+    }
+
+    const vehicles = await this.ormRepository.find({
+      skip,
+      take: 2,
+    });
+    return vehicles;
+  }
+
+  public async remove(id: string): Promise<Vehicle[]> {
+    const vehicle = await this.findById(id);
+
+    await this.ormRepository.delete({ id: vehicle?.id });
+
+    const vehicles = await this.ormRepository.find();
+
+    return vehicles;
   }
 }

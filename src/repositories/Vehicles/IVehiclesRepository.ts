@@ -23,4 +23,6 @@ export default interface IVehiclesRepository {
   findByTransmissionType(transmission_type: string): Promise<Vehicle | undefined>;
   findByName(name: string): Promise<Vehicle | undefined>;
   listAllVehicles(): Promise<Vehicle[]>;
+  listFilteredVehicles(filter: string, page: number): Promise<Vehicle[]>;
+  remove(id: string): Promise<Vehicle[]>;
 }
