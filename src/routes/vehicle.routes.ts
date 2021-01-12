@@ -35,4 +35,11 @@ vehicleRouter.delete(
   vehiclesController.delete
 );
 
+vehicleRouter.put(
+  "/update/:id",
+  auth.adminAuthorization,
+  upload.single('car_image'),
+  vehiclesController.update
+);
+
 export default vehicleRouter;

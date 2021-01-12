@@ -3,6 +3,8 @@ import { Request, Response } from "express";
 import CreateVehicleService from "../../services/Vehicles/CreateVehicleService";
 import ListAllVehiclesService from "../../services/Vehicles/ListAllVehiclesService";
 import DeleteVehicleService from "../../services/Vehicles/DeleteVehicleService";
+import UpdateVehicleService from "../../services/Vehicles/UpdateVehicleService";
+import { classToClass } from "class-transformer";
 
 export default class VehiclesController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -36,7 +38,7 @@ export default class VehiclesController {
         car_image,
       });
 
-      return response.status(200).json(vehicle);
+      return response.status(200).json(classToClass(vehicle));
     } catch (err) {
       return response.status(400).json({ error: err.message });
     }
@@ -53,7 +55,7 @@ export default class VehiclesController {
         page: Number(page),
       });
 
-      return response.status(200).json(vehicles);
+      return response.status(200).json(classToClass(vehicles));
     } catch (err) {
       return response.status(400).json({ error: err.message });
     }
@@ -67,7 +69,47 @@ export default class VehiclesController {
 
       const vehicles = await deleteVehicle.run({ id });
 
-      return response.status(200).json(vehicles);
+      return response.status(200).json(classToClass(vehicles));
+    } catch (err) {
+      return response.status(400).json({ error: err.message });
+    }
+  }
+
+  public async update(request: Request, response: Response): Promise<Response> {
+    try {
+      const updateVehicle = new UpdateVehicleService();
+
+      const { id } = request.params;
+
+      const car_image = request.file.filename;
+
+      const {
+        name,
+        brand,
+        daily_value,
+        transmission_type,
+        fuel_type,
+        acceleration,
+        maximun_speed,
+        seats,
+        potency,
+      } = request.body;
+
+      const updatedVehicle = await updateVehicle.run({
+        id,
+        name,
+        brand,
+        daily_value,
+        transmission_type,
+        fuel_type,
+        acceleration,
+        maximun_speed,
+        seats,
+        potency,
+        car_image,
+      });
+
+      return response.status(200).json(classToClass(updatedVehicle));
     } catch (err) {
       return response.status(400).json({ error: err.message });
     }

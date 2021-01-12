@@ -117,7 +117,7 @@ export default class VehiclesRepository implements IVehiclesRepository {
           { daily_value: LessThanOrEqual(Number(filter)) },
         ],
         skip,
-        take: 2,
+        take: 10,
       });
 
       return vehicles;
@@ -125,7 +125,7 @@ export default class VehiclesRepository implements IVehiclesRepository {
 
     const vehicles = await this.ormRepository.find({
       skip,
-      take: 2,
+      take: 10,
     });
     return vehicles;
   }

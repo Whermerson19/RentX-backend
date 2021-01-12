@@ -1,8 +1,15 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Expose } from "class-transformer";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
-@Entity('vehicles')
+@Entity("vehicles")
 export default class Vehicle {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Column()
@@ -11,7 +18,7 @@ export default class Vehicle {
   @Column()
   brand: string;
 
-  @Column('decimal')
+  @Column("decimal")
   daily_value: number;
 
   @Column()
@@ -20,16 +27,16 @@ export default class Vehicle {
   @Column()
   fuel_type: string;
 
-  @Column('decimal')
+  @Column("decimal")
   acceleration: number;
 
-  @Column('int')
+  @Column("int")
   maximun_speed: number;
 
-  @Column('int')
+  @Column("int")
   seats: number;
 
-  @Column('int')
+  @Column("int")
   potency: number;
 
   @Column()
@@ -40,4 +47,11 @@ export default class Vehicle {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @Expose({ name: "car_image_url" })
+  getCarImageUrl(): string | null {
+    return this.car_image
+      ? `http://localhost:3333/files/${this.car_image}`
+      : null;
+  }
 }
