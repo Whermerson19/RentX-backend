@@ -2,13 +2,8 @@ import { getRepository } from "typeorm";
 import Rentals from "../../models/Rentals";
 
 import UsersRepository from "../../repositories/Users/UsersRepository";
-import {
-  isBefore,
-  isWithinInterval,
-  eachDayOfInterval,
-  isEqual,
-  isToday,
-} from "date-fns";
+import VehiclesRepository from "../../repositories/Vehicles/VehiclesRepository";
+import { isBefore, eachDayOfInterval, isEqual, isToday } from "date-fns";
 
 interface IRequest {
   car_id: string;
@@ -26,30 +21,34 @@ export default class StartRentService {
   }: IRequest): Promise<Rentals> {
     const rentalsRepository = getRepository(Rentals);
     const usersRepository = new UsersRepository();
+    const vehiclesRepository = new VehiclesRepository();
 
     const user = await usersRepository.findById(client_id);
     if (!user) throw new Error("invalid user");
 
-    const verifyCar = await rentalsRepository.findOne({
+    const existsCar = await vehiclesRepository.findById(car_id);
+    if (!existsCar) throw new Error("Invalid car_id");
+
+    const checkedCarInRentals = await rentalsRepository.findOne({
       where: {
         car_id,
       },
     });
 
-    if (verifyCar) {
-      const intervalVerifyCar = eachDayOfInterval({
-        start: verifyCar.start_date,
-        end: verifyCar.end_date,
+    if (checkedCarInRentals) {
+      const checkedCarInRentalsInterval = eachDayOfInterval({
+        start: checkedCarInRentals.start_date,
+        end: checkedCarInRentals.end_date,
       });
 
-      const intervalNewRental = eachDayOfInterval({
+      const createRentalsInterval = eachDayOfInterval({
         start: start_date,
         end: end_date,
       });
 
-      for (let i = 0; i < intervalNewRental.length; i++) {
-        for (let j = 0; j < intervalVerifyCar.length; j++) {
-          if (isEqual(intervalNewRental[i], intervalVerifyCar[j]))
+      for (let i = 0; i < createRentalsInterval.length; i++) {
+        for (let j = 0; j < checkedCarInRentalsInterval.length; j++) {
+          if (isEqual(createRentalsInterval[i], checkedCarInRentalsInterval[j]))
             throw new Error("This car is already rented");
         }
       }
