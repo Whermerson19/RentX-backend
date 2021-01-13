@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 
 import CreateVehicleService from "../../services/Vehicles/CreateVehicleService";
-import ListAllVehiclesService from "../../services/Vehicles/ListAllVehiclesService";
 import DeleteVehicleService from "../../services/Vehicles/DeleteVehicleService";
 import UpdateVehicleService from "../../services/Vehicles/UpdateVehicleService";
 import { classToClass } from "class-transformer";
@@ -39,23 +38,6 @@ export default class VehiclesController {
       });
 
       return response.status(200).json(classToClass(vehicle));
-    } catch (err) {
-      return response.status(400).json({ error: err.message });
-    }
-  }
-
-  public async index(request: Request, response: Response): Promise<Response> {
-    try {
-      const listAllVehiclesService = new ListAllVehiclesService();
-
-      const { filter, page } = request.query;
-
-      const vehicles = await listAllVehiclesService.run({
-        filter: String(filter),
-        page: Number(page),
-      });
-
-      return response.status(200).json(classToClass(vehicles));
     } catch (err) {
       return response.status(400).json({ error: err.message });
     }

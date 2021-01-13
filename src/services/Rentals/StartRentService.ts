@@ -3,6 +3,7 @@ import Rentals from "../../models/Rentals";
 
 import UsersRepository from "../../repositories/Users/UsersRepository";
 import VehiclesRepository from "../../repositories/Vehicles/VehiclesRepository";
+
 import { isBefore, eachDayOfInterval, isEqual, isToday } from "date-fns";
 
 interface IRequest {

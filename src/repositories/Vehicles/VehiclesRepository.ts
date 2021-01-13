@@ -1,4 +1,4 @@
-import { getRepository, LessThanOrEqual, Not, Repository } from "typeorm";
+import { getRepository, LessThanOrEqual, Repository } from "typeorm";
 import Vehicle from "../../models/Vehicle";
 import IVehiclesRepository, { ICreateVehicle } from "./IVehiclesRepository";
 
@@ -94,40 +94,6 @@ export default class VehiclesRepository implements IVehiclesRepository {
     });
 
     return vehicle;
-  }
-
-  public async listAllVehicles(): Promise<Vehicle[]> {
-    const vehicles = await this.ormRepository.find();
-
-    return vehicles;
-  }
-
-  public async listFilteredVehicles(
-    filter: string,
-    page: number
-  ): Promise<Vehicle[]> {
-    const skip = 2 * page - 2;
-
-    if (filter !== "") {
-      const vehicles = await this.ormRepository.find({
-        where: [
-          { fuel_type: filter },
-          { brand: filter },
-          { transmission_type: filter },
-          { daily_value: LessThanOrEqual(Number(filter)) },
-        ],
-        skip,
-        take: 10,
-      });
-
-      return vehicles;
-    }
-
-    const vehicles = await this.ormRepository.find({
-      skip,
-      take: 10,
-    });
-    return vehicles;
   }
 
   public async remove(id: string): Promise<Vehicle[]> {

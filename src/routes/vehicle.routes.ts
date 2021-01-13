@@ -7,12 +7,6 @@ import Auth from "../middlewares/Authorization";
 
 import uploadConfig from "../config/upload";
 
-/* --------------------------------- */
-
-import f from "../repositories/Vehicles/VehiclesRepository";
-
-/* --------------------------------- */
-
 const vehicleRouter = Router();
 
 const upload = multer(uploadConfig);
@@ -26,8 +20,6 @@ vehicleRouter.post(
   upload.single("car_image"),
   vehiclesController.create
 );
-
-vehicleRouter.get("/", auth.commonAuthorization, vehiclesController.index);
 
 vehicleRouter.delete(
   "/delete/:id",
