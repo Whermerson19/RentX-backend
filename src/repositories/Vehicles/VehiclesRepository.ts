@@ -105,4 +105,10 @@ export default class VehiclesRepository implements IVehiclesRepository {
 
     return vehicles;
   }
+
+  public async listAllVehicles(): Promise<Vehicle[]> {
+    const vehicles = await this.ormRepository.find();
+
+    return vehicles;
+  }
 }
