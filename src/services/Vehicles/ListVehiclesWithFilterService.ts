@@ -7,14 +7,19 @@ import { eachDayOfInterval, isEqual } from "date-fns";
 import { getRepository } from "typeorm";
 import Rentals from "../../models/Rentals";
 
+interface IRangeValue {
+  start: number;
+  end: number;
+}
+
 interface IRequest {
   client_id: string;
   start_date: Date;
   end_date: Date;
-  brand?: string;
-  range_value?: number[];
-  fuel_type?: string;
-  transmission_type?: string;
+  brand: string;
+  range_value: IRangeValue;
+  fuel_type: string;
+  transmission_type: string;
 }
 
 export default class ListVehiclesWithFilterService {
@@ -74,6 +79,36 @@ export default class ListVehiclesWithFilterService {
         }
       else filteredVehiclesPerDate.push(allVehicles[i]);
     }
-    return filteredVehiclesPerDate;
+
+    let rangeInterval: number[] = [];
+    for (let i = range_value.start; i <= range_value.end; i++)
+      rangeInterval.push(i);
+
+    if (brand === 'all') {
+      const filter = filteredVehiclesPerDate.filter((curr) => {
+        for (let i = 0; i < rangeInterval.length; i++)
+          if (
+            rangeInterval[i] === Math.floor(curr.daily_value) &&
+            curr.fuel_type === fuel_type &&
+            curr.transmission_type === transmission_type
+          )
+            return curr;
+      });
+
+      return filter;
+    }
+
+    const filter = filteredVehiclesPerDate.filter((curr) => {
+      for (let i = 0; i < rangeInterval.length; i++)
+        if (
+          rangeInterval[i] === Math.floor(curr.daily_value) &&
+          curr.brand === brand &&
+          curr.fuel_type === fuel_type &&
+          curr.transmission_type === transmission_type
+        )
+          return curr;
+    });
+
+    return filter;
   }
 }
