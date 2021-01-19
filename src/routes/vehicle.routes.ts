@@ -43,22 +43,33 @@ vehicleRouter.get(
     try {
       const list = new ListVehiclesWithFilterService();
 
-      const { start_date, end_date, range_value_start, range_value_end, brand, fuel_type, transmission_type } = request.query;
+      const {
+        start_date,
+        end_date,
+        range_value_start,
+        range_value_end,
+        brand,
+        fuel_type,
+        transmission_type,
+      } = request.query;
       const client_id = request.user.id;
 
       const data = await list.run({
         client_id,
         start_date: new Date(String(start_date)),
         end_date: new Date(String(end_date)),
-        range_value: {start: Number(range_value_start), end: Number(range_value_end)},
+        range_value: {
+          start: Number(range_value_start),
+          end: Number(range_value_end),
+        },
         brand: String(brand),
         fuel_type: String(fuel_type),
-        transmission_type: String(transmission_type)
+        transmission_type: String(transmission_type),
       });
 
-      return response.json(data)
+      return response.json(data);
     } catch (err) {
-      return response.status(400).json({ error: err.message })
+      return response.status(400).json({ error: err.message });
     }
   }
 );

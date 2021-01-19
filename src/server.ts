@@ -2,6 +2,8 @@ import "reflect-metadata";
 
 import express from "express";
 
+import cors from 'cors';
+
 import appRouter from "./routes";
 
 import uploadConfig from "./config/upload";
@@ -9,6 +11,8 @@ import uploadConfig from "./config/upload";
 import "./database";
 
 const app = express();
+
+app.use(cors());
 
 app.use(express.json());
 
